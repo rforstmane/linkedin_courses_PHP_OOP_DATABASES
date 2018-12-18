@@ -27,16 +27,15 @@ class Bicycle {
 
   public function __construct($args=[]) {
     //$this->brand = isset($args['brand']) ? $args['brand'] : '';
-    $this->brand = $args['brand'] ?? '';
-    $this->model = $args['model'] ?? '';
-    $this->year = $args['year'] ?? '';
-    $this->category = $args['category'] ?? '';
-    $this->color = $args['color'] ?? '';
-    $this->description = $args['description'] ?? '';
-    $this->gender = $args['gender'] ?? '';
-    $this->price = $args['price'] ?? 0;
-    $this->weight_kg = $args['weight_kg'] ?? 0.0;
-    $this->condition_id = $args['condition_id'] ?? 3;
+      $this->brand = isset($args['brand']) ? $args['brand'] : '';
+      $this->model = isset($args['model']) ? $args['model'] : '';
+      $this->year = isset($args['year']) ? $args['year'] : '';
+      $this->category = isset($args['category']) ? $args['category'] : '';
+      $this->description = isset($args['description']) ? $args['description'] : '';
+      $this->gender = isset($args['gender']) ? $args['gender'] : '';
+      $this->price = isset($args['price']) ? $args['price'] : '';
+      $this->weight_kg = isset($args['weight_kg']) ? $args['weight_kg'] : '';
+      $this->condition_id = isset($args['condition_id']) ? $args['condition_id'] : '';
 
     // Caution: allows private/protected properties to be set
     // foreach($args as $k => $v) {
