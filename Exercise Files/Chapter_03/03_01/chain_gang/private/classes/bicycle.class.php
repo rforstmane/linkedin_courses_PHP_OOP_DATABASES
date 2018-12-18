@@ -2,6 +2,45 @@
 
 class Bicycle {
 
+  // Start of active record code
+  static protected $database;
+
+  static public function set_database($database) {
+    self::$database = $database;
+  }
+
+  static public function find_by_sql($sql){
+      $result = self::$database->query($sql);
+      if(!$result) {
+        exit("Database query failed.");
+      }
+
+      $object_array = [];
+      while ($record = $result->fetch_assoc()) {
+        $object_array[] = self::instantiate($record);
+      }
+      $result->free();
+
+      return $object_array;
+  }
+
+  static public function find_all() {
+      $sql = "SELECT * FROM bicycles";
+      return self::find_by_sql($sql);
+  }
+
+  static protected function instantiate($record) {
+    $object = new self;
+    foreach ($record as $property=>$value) {
+      if(property_exists($object, $property)) {
+        $object->$property = $value;
+      }
+    }
+    return $object;
+  }
+  // End of active record code
+
+  public $id;
   public $brand;
   public $model;
   public $year;
@@ -27,16 +66,15 @@ class Bicycle {
 
   public function __construct($args=[]) {
     //$this->brand = isset($args['brand']) ? $args['brand'] : '';
-    $this->brand = $args['brand'] ?? '';
-    $this->model = $args['model'] ?? '';
-    $this->year = $args['year'] ?? '';
-    $this->category = $args['category'] ?? '';
-    $this->color = $args['color'] ?? '';
-    $this->description = $args['description'] ?? '';
-    $this->gender = $args['gender'] ?? '';
-    $this->price = $args['price'] ?? 0;
-    $this->weight_kg = $args['weight_kg'] ?? 0.0;
-    $this->condition_id = $args['condition_id'] ?? 3;
+      $this->brand = isset($args['brand']) ? $args['brand'] : '';
+      $this->model = isset($args['model']) ? $args['model'] : '';
+      $this->year = isset($args['year']) ? $args['year'] : '';
+      $this->category = isset($args['category']) ? $args['category'] : '';
+      $this->description = isset($args['description']) ? $args['description'] : '';
+      $this->gender = isset($args['gender']) ? $args['gender'] : '';
+      $this->price = isset($args['price']) ? $args['price'] : 0;
+      $this->weight_kg = isset($args['weight_kg']) ? $args['weight_kg'] : 0.0;
+      $this->condition_id = isset($args['condition_id']) ? $args['condition_id'] : 3;
 
     // Caution: allows private/protected properties to be set
     // foreach($args as $k => $v) {
