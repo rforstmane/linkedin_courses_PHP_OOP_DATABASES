@@ -15,4 +15,9 @@ function confirm_db_connect($connection) {
   }
 }
 
+function db_disconnect($connection) {
+  if(isset($connection)) {
+      $connection->close();
+  }
+}
 ?>
