@@ -55,7 +55,7 @@ class Bicycle {
     return $object;
   }
 
-  public function create() {
+  protected function create() {
     $attributes = $this->sanitized_attributes();
     $sql = "INSERT INTO bicycles (";
     $sql .= join(', ', array_keys($attributes));
@@ -67,6 +67,36 @@ class Bicycle {
       $this->id = self::$database->insert_id;
     }
     return $result;
+  }
+
+  protected function update() {
+    $attributes = $this->sanitized_attributes();
+    $attributes_pairs = [];
+    foreach ($attributes as $key => $value) {
+      $attributes_pairs[] = "{$key}='{$value}'";
+    }
+    $sql = "UPDATE bicycles SET ";
+    $sql .= join(', ', $attributes_pairs);
+    $sql .= " WHERE id='" . self::$database->escape_string($this->id) . "' ";
+    $sql .= "LIMIT 1";
+    $result = self::$database->query($sql);
+    return $result;
+  }
+
+  public function save() {
+    if(isset($this->id)) {
+      return $this->update();
+    } else {
+      return $this->create();
+    }
+  }
+
+  public function merge_attributes($args=[]) {
+      foreach ($args as $key => $value) {
+          if(property_exists($this, $key) && !is_null($value)) {
+            $this->$key = $value;
+          }
+    }
   }
 
   public function attributes() {
@@ -97,8 +127,8 @@ class Bicycle {
   public $description;
   public $gender;
   public $price;
-  protected $weight_kg;
-  protected $condition_id;
+  public $weight_kg;
+  public $condition_id;
 
   public const CATEGORIES = ['Road', 'Mountain', 'Hybrid', 'Cruiser', 'City', 'BMX'];
 
@@ -114,16 +144,16 @@ class Bicycle {
 
   public function __construct($args=[]) {
     //$this->brand = isset($args['brand']) ? $args['brand'] : '';
-    $this->brand = $args['brand'] ?? '';
-    $this->model = $args['model'] ?? '';
-    $this->year = $args['year'] ?? '';
-    $this->category = $args['category'] ?? '';
-    $this->color = $args['color'] ?? '';
-    $this->description = $args['description'] ?? '';
-    $this->gender = $args['gender'] ?? '';
-    $this->price = $args['price'] ?? 0;
-    $this->weight_kg = $args['weight_kg'] ?? 0.0;
-    $this->condition_id = $args['condition_id'] ?? 3;
+      $this->brand = isset($_POST['brand']) ? $_POST['brand'] : '';
+      $this->model = isset($_POST['model']) ? $_POST['model'] : '';
+      $this->year = isset($_POST['year']) ? $_POST['year'] : '';
+      $this->category = isset($_POST['category']) ? $_POST['category'] : '';
+      $this->color = isset($_POST['color']) ? $_POST['color'] : '';
+      $this->description = isset($_POST['description']) ? $_POST['description'] : '';
+      $this->gender = isset($_POST['gender']) ? $_POST['gender'] : '';
+      $this->price = isset($_POST['price']) ? $_POST['price'] : 0;
+      $this->weight_kg = isset($_POST['weight_kg']) ? $_POST['weight_kg'] : 0.0;
+      $this->condition_id = isset($_POST['condition_id']) ? $_POST['condition_id'] : 3;
 
     // Caution: allows private/protected properties to be set
     // foreach($args as $k => $v) {
