@@ -1,5 +1,14 @@
 <?php
 
+function require_login() {
+  global $session;
+    if(!$session->is_logged_in()) {
+        redirect_to(url_for('staff/login.php'));
+    } else {
+
+    }
+}
+
 function display_errors($errors=array()) {
   $output = '';
   if(!empty($errors)) {
