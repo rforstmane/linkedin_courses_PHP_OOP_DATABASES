@@ -5,20 +5,9 @@ require_once('../../../private/initialize.php');
 if(is_post_request()) {
 
   // Create record using post parameters
-  $args = [];
-  $args['brand'] = isset($_POST['brand']) ? $_POST['brand'] : NULL;
-  $args['model'] = isset($_POST['model']) ? $_POST['model'] : NULL;
-  $args['year'] = isset($_POST['year']) ? $_POST['year'] : NULL;
-  $args['category'] = isset($_POST['category']) ? $_POST['category'] : NULL;
-  $args['color'] = isset($_POST['color']) ? $_POST['color'] : NULL;
-  $args['gender'] = isset($_POST['gender']) ? $_POST['gender'] : NULL;
-  $args['price'] = isset($_POST['price']) ? $_POST['price'] : NULL;
-  $args['weight_kg'] = isset($_POST['weight_kg']) ? $_POST['weight_kg'] : NULL;
-  $args['condition_id'] = isset($_POST['condition_id']) ? $_POST['condition_id'] : NULL;
-  $args['description'] = isset($_POST['description']) ? $_POST['description'] : NULL;
-
+  $args = $_POST['bicycle'];
   $bicycle = new Bicycle($args);
-  $result = $bicycle->create();
+  $result = $bicycle->save();
 
   if($result === true) {
     $new_id = $bicycle->id;
