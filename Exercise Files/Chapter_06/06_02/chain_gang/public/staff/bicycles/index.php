@@ -3,8 +3,10 @@
 
 <?php
 
+$pagination = new Pagination($current_page, $per_page, $total_count);
+
 // Find all bicycles;
-$bicycles = Bicycle::find_all();
+//$bicycles = Bicycle::find_all();
 
 ?>
 <?php $page_title = 'Bicycles'; ?>
