@@ -29,6 +29,24 @@ class Pagination {
         $next = $this->current_page + 1;
         return ($next <= $this->total_pages()) ? $next : false;
     }
+
+    public function previous_link($url="") {
+        $link = "";
+        if($this->previous_page() != false) {
+            $link = "<a href=\"{$url}?page={$this->previous_page()}\">";
+            $link .= "&laquo; Previous</a>";
+        }
+        return $link;
+    }
+
+    public function next_link($url="") {
+        $link="";
+        if($this->next_page() != false) {
+            $link = "<a href=\"{$url}?page={$this->next_page()}\">";
+            $link .= "Next &raquo;</a>";
+        }
+        return $link;
+    }
 }
 
 ?>
